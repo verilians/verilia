@@ -1,10 +1,19 @@
 import { NextResponse } from 'next/server';
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || 'AIzaSyBIDoWO4S8KfTvu94hvtoGRIeokUv-BXsQ';
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
 export async function POST(request) {
   try {
+    // Check if API key is configured
+    if (!GEMINI_API_KEY) {
+      console.error('GEMINI_API_KEY environment variable is not set');
+      return NextResponse.json({ 
+        error: 'API key not configured. Please set GEMINI_API_KEY environment variable.',
+        details: 'Missing GEMINI_API_KEY in environment variables'
+      }, { status: 500 });
+    }
+
     const { messages } = await request.json();
     
     // Get the last user message

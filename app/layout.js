@@ -14,8 +14,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Bible Counsellor AI",
+  title: "Verilia",
   description: "AI-powered Bible counselling and guidance",
+  icons: {
+    icon: '/verilia-logo.jpeg',
+  },
 };
 
 export default function RootLayout({ children }) {
