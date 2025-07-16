@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import AnimatedText from "./AnimatedText";
 
-const ChatBubble = ({ message }) => {
+const ChatBubble = ({ message, isLatestAIMessage = false }) => {
   const bubbleRef = useRef(null);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
@@ -52,12 +52,16 @@ const ChatBubble = ({ message }) => {
           
           <div className="flex-1">
             {isBot ? (
-              <AnimatedText
-                text={message.content}
-                speed={25}
-                onComplete={() => setIsTypingComplete(true)}
-                className="text-sm leading-relaxed"
-              />
+              isLatestAIMessage ? (
+                <AnimatedText
+                  text={message.content}
+                  speed={25}
+                  onComplete={() => setIsTypingComplete(true)}
+                  className="text-sm leading-relaxed"
+                />
+              ) : (
+                <p className="text-sm leading-relaxed">{message.content}</p>
+              )
             ) : (
               <p className="text-sm leading-relaxed">{message.content}</p>
             )}

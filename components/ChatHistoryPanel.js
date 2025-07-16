@@ -8,6 +8,14 @@ const ChatHistoryPanel = () => {
   const { messages, isLoading, error, lastUpdate } = useChatHistoryContext();
   const messagesEndRef = useRef(null);
 
+  // Get the latest AI message ID for animation
+  const getLatestAIMessageId = () => {
+    const aiMessages = messages.filter(msg => msg.sender === 'bot');
+    return aiMessages.length > 0 ? aiMessages[aiMessages.length - 1].id : null;
+  };
+
+  const latestAIMessageId = getLatestAIMessageId();
+
   // Auto-scroll to bottom when new messages arrive
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -77,7 +85,8 @@ const ChatHistoryPanel = () => {
             type: message.sender === 'user' ? 'user' : 'bot',
             content: message.message,
             timestamp: new Date(message.created_at)
-          }} 
+          }}
+          isLatestAIMessage={message.id === latestAIMessageId && message.sender === 'bot'}
         />
       ))}
       <div ref={messagesEndRef} />
