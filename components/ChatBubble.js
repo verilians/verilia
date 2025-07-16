@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import AnimatedText from "./AnimatedText";
 
 const ChatBubble = ({ message, isLatestAIMessage = false }) => {

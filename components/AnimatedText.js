@@ -16,13 +16,11 @@ const AnimatedText = ({
     if (!text) return;
 
     if (!shouldAnimate) {
-      // Show full text immediately if we shouldn't animate
       setDisplayedText(text);
       setCurrentIndex(text.length);
       return;
     }
 
-    // Start animation
     setDisplayedText('');
     setCurrentIndex(0);
 

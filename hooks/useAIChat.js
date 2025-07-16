@@ -6,7 +6,6 @@ export const useAIChat = () => {
   const [isSending, setIsSending] = useState(false);
   const conversationBuffer = useRef([]);
 
-  // Sync conversation buffer with database messages
   useEffect(() => {
     if (messages.length > 0) {
       conversationBuffer.current = messages.map(msg => ({
@@ -21,13 +20,8 @@ export const useAIChat = () => {
     setIsSending(true);
     
     try {
-      // Add user message to database
       await addMessage(content, 'user');
-
-      // Add to local conversation buffer for immediate context
       conversationBuffer.current.push({ type: 'user', content, id: Date.now() });
-
-      // Use conversation buffer for API (more reliable than context state)
       const conversationMessages = [...conversationBuffer.current];
 
       // Get AI response
@@ -48,17 +42,11 @@ export const useAIChat = () => {
 
       const data = await response.json();
       
-      // Add AI response to database
       await addMessage(data.message, 'bot');
-      
-      // Add AI response to conversation buffer
       conversationBuffer.current.push({ type: 'assistant', content: data.message, id: Date.now() + 1 });
       
       return data.message;
     } catch (error) {
-      console.error('Error sending message:', error);
-      
-      // Add error message
       await addMessage(
         `I apologize, but I'm having trouble connecting right now. Error: ${error.message}. Please try again in a moment.`,
         'bot'

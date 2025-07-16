@@ -20,28 +20,23 @@ export async function POST(request) {
       return NextResponse.json({ error: 'No messages provided' }, { status: 400 });
     }
 
-    // Build conversation context from all messages
     const conversationHistory = messages.map(msg => {
       const role = msg.type === 'user' ? 'user' : 'assistant';
       return `${role}: ${msg.content}`;
     }).join('\n\n');
 
-    // Create a conversation summary for better context understanding
     const createConversationSummary = (messages) => {
       if (messages.length <= 2) return '';
       
-      const recentMessages = messages.slice(-6); // Last 6 messages for context
+      const recentMessages = messages.slice(-6);
       const summary = recentMessages.map(msg => {
         const role = msg.type === 'user' ? 'User' : 'Assistant';
         return `${role}: ${msg.content}`;
       }).join(' | ');
       
-      // Extract key topics and references for better context
       const keyTopics = [];
       const userMessages = recentMessages.filter(msg => msg.type === 'user');
-      const assistantMessages = recentMessages.filter(msg => msg.type === 'assistant');
       
-      // Look for main topics discussed
       if (userMessages.length > 0) {
         const lastUserMessage = userMessages[userMessages.length - 1];
         if (lastUserMessage.content.toLowerCase().includes('alone') || 
@@ -63,7 +58,6 @@ export async function POST(request) {
 
     const conversationSummary = createConversationSummary(messages);
 
-    // Prepare the system prompt
     const systemPrompt = `You are Verilia AI — a thoughtful, conversational companion inspired by the tone of Apostle Grace Lubega's Phaneroo Ministry.
 
 Your personality is marked by:
