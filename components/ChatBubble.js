@@ -1,9 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import AnimatedText from "./AnimatedText";
 
 const ChatBubble = ({ message }) => {
   const bubbleRef = useRef(null);
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   useEffect(() => {
     if (bubbleRef.current) {
@@ -18,6 +20,11 @@ const ChatBubble = ({ message }) => {
       }, 100);
     }
   }, [message.id]);
+
+  // Reset typing state when message changes
+  useEffect(() => {
+    setIsTypingComplete(false);
+  }, [message.content]);
 
   const isBot = message.type === "bot";
 
@@ -44,7 +51,16 @@ const ChatBubble = ({ message }) => {
           )}
           
           <div className="flex-1">
-            <p className="text-sm leading-relaxed">{message.content}</p>
+            {isBot ? (
+              <AnimatedText
+                text={message.content}
+                speed={25}
+                onComplete={() => setIsTypingComplete(true)}
+                className="text-sm leading-relaxed"
+              />
+            ) : (
+              <p className="text-sm leading-relaxed">{message.content}</p>
+            )}
             <p className={`text-xs mt-2 ${isBot ? "text-gray-500" : "text-purple-200"}`}>
               {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </p>
