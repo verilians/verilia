@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react';
 
 const AnimatedText = ({ 
   text, 
-  speed = 30, 
+  speed = 100, 
   onComplete, 
-  className = "" 
+  className = "",
+  shouldAnimate = true
 }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -14,7 +15,14 @@ const AnimatedText = ({
   useEffect(() => {
     if (!text) return;
 
-    // Reset when text changes
+    if (!shouldAnimate) {
+      // Show full text immediately if we shouldn't animate
+      setDisplayedText(text);
+      setCurrentIndex(text.length);
+      return;
+    }
+
+    // Start animation
     setDisplayedText('');
     setCurrentIndex(0);
 
@@ -32,12 +40,12 @@ const AnimatedText = ({
     }, speed);
 
     return () => clearInterval(interval);
-  }, [text, speed, onComplete]);
+  }, [text, speed, onComplete, shouldAnimate]);
 
   return (
     <span className={className}>
       {displayedText}
-      {currentIndex < text.length && (
+      {currentIndex < text.length && shouldAnimate && (
         <span className="animate-pulse">|</span>
       )}
     </span>

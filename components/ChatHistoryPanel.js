@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useChatHistoryContext } from '../contexts/ChatHistoryContext';
 import ChatBubble from './ChatBubble';
 
@@ -77,18 +77,22 @@ const ChatHistoryPanel = () => {
 
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
-      {messages.map((message) => (
-        <ChatBubble 
-          key={message.id} 
-          message={{
-            id: message.id,
-            type: message.sender === 'user' ? 'user' : 'bot',
-            content: message.message,
-            timestamp: new Date(message.created_at)
-          }}
-          isLatestAIMessage={message.id === latestAIMessageId && message.sender === 'bot'}
-        />
-      ))}
+      {messages.map((message) => {
+        const isLatestAIMessage = message.id === latestAIMessageId && message.sender === 'bot';
+        
+        return (
+          <ChatBubble 
+            key={message.id} 
+            message={{
+              id: message.id,
+              type: message.sender === 'user' ? 'user' : 'bot',
+              content: message.message,
+              timestamp: new Date(message.created_at)
+            }}
+            isLatestAIMessage={isLatestAIMessage}
+          />
+        );
+      })}
       <div ref={messagesEndRef} />
     </div>
   );

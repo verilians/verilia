@@ -5,7 +5,6 @@ import AnimatedText from "./AnimatedText";
 
 const ChatBubble = ({ message, isLatestAIMessage = false }) => {
   const bubbleRef = useRef(null);
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   useEffect(() => {
     if (bubbleRef.current) {
@@ -20,11 +19,6 @@ const ChatBubble = ({ message, isLatestAIMessage = false }) => {
       }, 100);
     }
   }, [message.id]);
-
-  // Reset typing state when message changes
-  useEffect(() => {
-    setIsTypingComplete(false);
-  }, [message.content]);
 
   const isBot = message.type === "bot";
 
@@ -52,16 +46,12 @@ const ChatBubble = ({ message, isLatestAIMessage = false }) => {
           
           <div className="flex-1">
             {isBot ? (
-              isLatestAIMessage ? (
-                <AnimatedText
-                  text={message.content}
-                  speed={25}
-                  onComplete={() => setIsTypingComplete(true)}
-                  className="text-sm leading-relaxed"
-                />
-              ) : (
-                <p className="text-sm leading-relaxed">{message.content}</p>
-              )
+              <AnimatedText
+                text={message.content}
+                speed={100}
+                shouldAnimate={isLatestAIMessage}
+                className="text-sm leading-relaxed"
+              />
             ) : (
               <p className="text-sm leading-relaxed">{message.content}</p>
             )}
