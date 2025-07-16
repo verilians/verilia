@@ -26,7 +26,7 @@ const Sidebar = () => {
         </svg>
       ),
       label: "History",
-      action: () => console.log("History clicked"),
+      action: () => {},
     },
     {
       id: "settings",
@@ -37,7 +37,7 @@ const Sidebar = () => {
         </svg>
       ),
       label: "Settings",
-      action: () => console.log("Settings clicked"),
+      action: () => {},
     },
   ];
 

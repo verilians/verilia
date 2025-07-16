@@ -52,8 +52,6 @@ User's question: ${lastUserMessage.content}`;
       ]
     };
 
-    console.log('Sending request to Gemini API:', JSON.stringify(requestBody, null, 2));
-
     const response = await fetch(GEMINI_API_URL, {
       method: 'POST',
       headers: {
@@ -62,8 +60,6 @@ User's question: ${lastUserMessage.content}`;
       },
       body: JSON.stringify(requestBody),
     });
-
-    console.log('Response status:', response.status);
 
     if (!response.ok) {
       const errorData = await response.text();
@@ -84,7 +80,6 @@ User's question: ${lastUserMessage.content}`;
     }
 
     const data = await response.json();
-    console.log('Gemini API Response:', JSON.stringify(data, null, 2));
     
     if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
       return NextResponse.json({ 

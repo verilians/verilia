@@ -9,19 +9,10 @@ export async function GET(request) {
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
-      // Use the deployed URL for production, localhost for development
-      const baseUrl = process.env.NODE_ENV === 'production' 
-        ? 'https://verilia.vercel.app'
-        : request.nextUrl.origin;
-      
-      return NextResponse.redirect(new URL(next, baseUrl));
+      return NextResponse.redirect(new URL(next, request.nextUrl.origin));
     }
   }
 
-  // If there's an error, redirect to home page instead of non-existent error page
-  const baseUrl = process.env.NODE_ENV === 'production' 
-    ? 'https://verilia.vercel.app'
-    : request.nextUrl.origin;
-  
-  return NextResponse.redirect(new URL('/', baseUrl));
+  // If there's an error, redirect to home page
+  return NextResponse.redirect(new URL('/', request.nextUrl.origin));
 } 

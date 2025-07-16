@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 
-const ChatInput = ({ onSendMessage }) => {
+const ChatInput = ({ onSendMessage, isSending = false }) => {
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (message.trim()) {
+    if (message.trim() && !isSending) {
       onSendMessage(message.trim());
       setMessage("");
     }
@@ -37,16 +37,24 @@ const ChatInput = ({ onSendMessage }) => {
         
         <button
           type="submit"
-          disabled={!message.trim()}
+          disabled={!message.trim() || isSending}
           className={`p-3 rounded-full transition-all duration-200 ${
-            message.trim()
+            message.trim() && !isSending
               ? "bg-purple-600 text-white hover:bg-purple-700 shadow-md hover:shadow-lg"
               : "bg-gray-200 text-gray-400 cursor-not-allowed"
           }`}
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-          </svg>
+          {isSending ? (
+            <div className="flex space-x-1">
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
+              <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
+            </div>
+          ) : (
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+            </svg>
+          )}
         </button>
       </form>
     </div>

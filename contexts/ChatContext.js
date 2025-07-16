@@ -37,8 +37,6 @@ export const ChatProvider = ({ children }) => {
     setIsLoading(true);
 
     try {
-      console.log('Sending message to API:', content);
-      
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -49,16 +47,12 @@ export const ChatProvider = ({ children }) => {
         }),
       });
 
-      console.log('API Response status:', response.status);
-
       if (!response.ok) {
         const errorData = await response.json();
-        console.error('API Error:', errorData);
         throw new Error(errorData.error || 'Failed to get response');
       }
 
       const data = await response.json();
-      console.log('API Success response:', data);
       
       const botResponse = {
         id: Date.now() + 1,

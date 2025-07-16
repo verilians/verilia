@@ -3,6 +3,7 @@ import "./globals.css";
 import Sidebar from "../components/Sidebar";
 import { ChatProvider } from "../contexts/ChatContext";
 import { UserProvider } from "../contexts/UserContext";
+import { ChatHistoryProvider } from "../contexts/ChatHistoryContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,14 +30,16 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <UserProvider>
-          <ChatProvider>
-            <div className="flex h-screen bg-gray-50">
-              <Sidebar />
-              <main className="flex-1 flex flex-col">
-                {children}
-              </main>
-            </div>
-          </ChatProvider>
+          <ChatHistoryProvider>
+            <ChatProvider>
+              <div className="flex h-screen bg-gray-50">
+                <Sidebar />
+                <main className="flex-1 flex flex-col">
+                  {children}
+                </main>
+              </div>
+            </ChatProvider>
+          </ChatHistoryProvider>
         </UserProvider>
       </body>
     </html>
