@@ -1,16 +1,34 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useChatHistoryContext } from '../contexts/ChatHistoryContext';
 
 export const useAIChat = () => {
-  const { addMessage } = useChatHistoryContext();
+  const { addMessage, messages } = useChatHistoryContext();
   const [isSending, setIsSending] = useState(false);
+  const conversationBuffer = useRef([]);
+
+  // Sync conversation buffer with database messages
+  useEffect(() => {
+    if (messages.length > 0) {
+      conversationBuffer.current = messages.map(msg => ({
+        type: msg.sender === 'user' ? 'user' : 'assistant',
+        content: msg.message,
+        id: msg.id
+      }));
+    }
+  }, [messages]);
 
   const sendMessage = useCallback(async (content) => {
     setIsSending(true);
     
     try {
-      // Add user message
+      // Add user message to database
       await addMessage(content, 'user');
+
+      // Add to local conversation buffer for immediate context
+      conversationBuffer.current.push({ type: 'user', content, id: Date.now() });
+
+      // Use conversation buffer for API (more reliable than context state)
+      const conversationMessages = [...conversationBuffer.current];
 
       // Get AI response
       const response = await fetch('/api/chat', {
@@ -19,7 +37,7 @@ export const useAIChat = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [{ type: 'user', content }]
+          messages: conversationMessages
         }),
       });
 
@@ -30,8 +48,11 @@ export const useAIChat = () => {
 
       const data = await response.json();
       
-      // Add AI response
+      // Add AI response to database
       await addMessage(data.message, 'bot');
+      
+      // Add AI response to conversation buffer
+      conversationBuffer.current.push({ type: 'assistant', content: data.message, id: Date.now() + 1 });
       
       return data.message;
     } catch (error) {
