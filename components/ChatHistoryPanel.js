@@ -76,7 +76,7 @@ const ChatHistoryPanel = () => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 space-y-4">
+    <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-4">
       {messages.map((message) => {
         const isLatestAIMessage = message.id === latestAIMessageId && message.sender === 'bot';
         

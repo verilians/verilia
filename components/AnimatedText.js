@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 const AnimatedText = ({ 
   text, 
-  speed = 100, 
+  speed = 30, 
   onComplete, 
   className = "",
   shouldAnimate = true
