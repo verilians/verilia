@@ -40,10 +40,15 @@ export const UserProvider = ({ children }) => {
 
   const signInWithGoogle = async () => {
     try {
+      // Use the deployed URL for production, localhost for development
+      const redirectUrl = process.env.NODE_ENV === 'production' 
+        ? 'https://verilia.vercel.app/auth/callback'
+        : `${window.location.origin}/auth/callback`;
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: redirectUrl,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
