@@ -52,11 +52,11 @@ const SignInModal = () => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full p-6 relative">
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -70,14 +70,14 @@ const SignInModal = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Welcome to Verilia</h2>
-          <p className="text-gray-600">Sign in to access your personalized Bible counseling experience</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Welcome to Verilia</h2>
+          <p className="text-gray-600 dark:text-gray-300">Sign in to access your personalized Bible counseling experience</p>
         </div>
 
         {/* Benefits */}
         <div className="mb-6">
-          <h3 className="text-sm font-medium text-gray-900 mb-3">What you'll get:</h3>
-          <ul className="space-y-2 text-sm text-gray-600">
+          <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-3">What you'll get:</h3>
+          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
             <li className="flex items-center space-x-2">
               <svg className="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -103,12 +103,12 @@ const SignInModal = () => {
         <button
           onClick={handleSignIn}
           disabled={isSigningIn}
-          className="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
         >
           {isSigningIn ? (
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-purple-600"></div>
-              <span className="text-gray-700 font-medium">Signing in...</span>
+              <span className="text-gray-700 dark:text-gray-200 font-medium">Signing in...</span>
             </>
           ) : (
             <>
@@ -130,7 +130,7 @@ const SignInModal = () => {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              <span className="text-gray-700 font-medium">Sign in with Google</span>
+              <span className="text-gray-700 dark:text-gray-200 font-medium">Sign in with Google</span>
             </>
           )}
         </button>
@@ -139,7 +139,7 @@ const SignInModal = () => {
         <div className="mt-4 text-center">
           <button
             onClick={handleClose}
-            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           >
             Maybe later
           </button>

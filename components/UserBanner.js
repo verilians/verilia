@@ -47,8 +47,8 @@ const UserBanner = () => {
 
   if (loading) {
     return (
-      <button className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 rounded-full flex items-center justify-center animate-pulse">
-        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gray-300 rounded-full"></div>
+      <button className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center animate-pulse">
+        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
       </button>
     );
   }
@@ -58,13 +58,13 @@ const UserBanner = () => {
       <div className="relative" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 transition-colors"
+          className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
         >
           {user.user_metadata?.avatar_url ? (
             <img
               src={user.user_metadata.avatar_url}
               alt="Profile"
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-200"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-gray-200 dark:border-gray-600"
             />
           ) : (
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -76,14 +76,14 @@ const UserBanner = () => {
         </button>
 
         {isOpen && (
-          <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-            <div className="px-4 py-3 border-b border-gray-100">
+          <div className="absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+            <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
               <div className="flex items-center space-x-3">
                 {user.user_metadata?.avatar_url ? (
                   <img
                     src={user.user_metadata.avatar_url}
                     alt="Profile"
-                    className="w-10 h-10 rounded-full border-2 border-gray-200"
+                    className="w-10 h-10 rounded-full border-2 border-gray-200 dark:border-gray-600"
                   />
                 ) : (
                   <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
@@ -93,10 +93,10 @@ const UserBanner = () => {
                   </div>
                 )}
                 <div>
-                  <p className="text-sm font-medium text-gray-900">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
                     {user.user_metadata?.full_name || 'User'}
                   </p>
-                  <p className="text-xs text-gray-500 truncate">
+                  <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                     {user.email}
                   </p>
                 </div>
@@ -107,7 +107,7 @@ const UserBanner = () => {
               <button
                 onClick={handleSignOut}
                 disabled={isSigningOut}
-                className="w-full flex items-center space-x-3 px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                className="w-full flex items-center space-x-3 px-4 py-2 text-left text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -125,12 +125,12 @@ const UserBanner = () => {
     <button
       onClick={handleSignIn}
       disabled={isSigningIn}
-      className="flex items-center space-x-2 px-3 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 shadow-sm"
+      className="flex items-center space-x-2 px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 shadow-sm"
     >
       {isSigningIn ? (
         <>
           <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-purple-600"></div>
-          <span className="text-sm font-medium text-gray-700">Signing in...</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Signing in...</span>
         </>
       ) : (
         <>
@@ -152,7 +152,7 @@ const UserBanner = () => {
               d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
             />
           </svg>
-          <span className="text-sm font-medium text-gray-700">Sign in</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Sign in</span>
         </>
       )}
     </button>

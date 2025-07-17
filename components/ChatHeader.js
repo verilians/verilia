@@ -1,13 +1,14 @@
 "use client";
 
 import UserBanner from './UserBanner';
+import ThemeToggle from './ThemeToggle';
 import { useUser } from '../contexts/UserContext';
 
 const ChatHeader = () => {
   const { user } = useUser();
 
   return (
-    <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between relative">
+    <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between relative">
       {/* Left side - Mobile menu space */}
       <div className="w-12 sm:w-16 flex-shrink-0"></div>
       
@@ -20,24 +21,25 @@ const ChatHeader = () => {
             </svg>
           </div>
           <div className="text-center">
-            <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Verilia</h1>
-            <p className="text-xs text-gray-500 hidden sm:block">AI Bible Counsellor</p>
+            <h1 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">Verilia</h1>
+            <p className="text-xs text-gray-500 dark:text-gray-400 hidden sm:block">AI Bible Counsellor</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
             v3.2
           </span>
           {!user && (
-            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
               Anonymous
             </span>
           )}
         </div>
       </div>
       
-      {/* Right side - User banner */}
-      <div className="flex items-center justify-end">
+      {/* Right side - Theme toggle and User banner */}
+      <div className="flex items-center space-x-2">
+        <ThemeToggle />
         <UserBanner />
       </div>
     </div>

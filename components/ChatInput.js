@@ -21,7 +21,7 @@ const ChatInput = ({ onSendMessage, isSending = false }) => {
   };
 
   return (
-    <div className="bg-white border-t border-gray-200 p-4">
+    <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
       <form onSubmit={handleSubmit} className="flex items-end space-x-3">
         <div className="flex-1 relative">
           <textarea
@@ -30,8 +30,8 @@ const ChatInput = ({ onSendMessage, isSending = false }) => {
             onKeyPress={handleKeyPress}
             placeholder={isSending ? "AI is thinking..." : "Ask me anything..."}
             disabled={isSending}
-            className={`w-full px-4 py-3 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 ${
-              isSending ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'
+            className={`w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 ${
+              isSending ? 'bg-gray-50 dark:bg-gray-700 cursor-not-allowed' : 'bg-white dark:bg-gray-700'
             }`}
             rows="1"
             style={{ minHeight: "48px", maxHeight: "120px" }}
@@ -44,7 +44,7 @@ const ChatInput = ({ onSendMessage, isSending = false }) => {
           className={`p-3 rounded-full transition-all duration-200 ${
             message.trim() && !isSending
               ? "bg-purple-600 text-white hover:bg-purple-700 shadow-md hover:shadow-lg"
-              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              : "bg-gray-200 dark:bg-gray-600 text-gray-400 dark:text-gray-500 cursor-not-allowed"
           }`}
         >
           {isSending ? (

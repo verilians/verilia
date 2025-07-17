@@ -5,6 +5,7 @@ import { ChatProvider } from "../contexts/ChatContext";
 import { UserProvider } from "../contexts/UserContext";
 import { ChatHistoryProvider } from "../contexts/ChatHistoryContext";
 import { ChatSessionProvider } from "../contexts/ChatSessionContext";
+import { ThemeProvider } from "../contexts/ThemeContext";
 import SignInModal from "../components/SignInModal";
 
 const geistSans = Geist({
@@ -31,23 +32,25 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <UserProvider>
-          <ChatHistoryProvider>
-            <ChatSessionProvider>
-              <ChatProvider>
-                <div className="flex h-screen bg-gray-50">
-                  {/* Responsive Sidebar */}
-                  <Sidebar />
-                  
-                  <main className="flex-1 flex flex-col">
-                    {children}
-                  </main>
-                </div>
-                <SignInModal />
-              </ChatProvider>
-            </ChatSessionProvider>
-          </ChatHistoryProvider>
-        </UserProvider>
+        <ThemeProvider>
+          <UserProvider>
+            <ChatHistoryProvider>
+              <ChatSessionProvider>
+                <ChatProvider>
+                  <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
+                    {/* Responsive Sidebar */}
+                    <Sidebar />
+                    
+                    <main className="flex-1 flex flex-col">
+                      {children}
+                    </main>
+                  </div>
+                  <SignInModal />
+                </ChatProvider>
+              </ChatSessionProvider>
+            </ChatHistoryProvider>
+          </UserProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

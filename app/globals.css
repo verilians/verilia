@@ -21,24 +21,22 @@
   --radius: 0.5rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f0f23;
-    --foreground: #f9fafb;
-    --primary: #a855f7;
-    --primary-foreground: #ffffff;
-    --secondary: #1f2937;
-    --secondary-foreground: #d1d5db;
-    --muted: #1f2937;
-    --muted-foreground: #9ca3af;
-    --accent: #1f2937;
-    --accent-foreground: #d1d5db;
-    --destructive: #dc2626;
-    --destructive-foreground: #ffffff;
-    --border: #374151;
-    --input: #1f2937;
-    --ring: #a855f7;
-  }
+.dark {
+  --background: #0f0f23;
+  --foreground: #f9fafb;
+  --primary: #a855f7;
+  --primary-foreground: #ffffff;
+  --secondary: #1f2937;
+  --secondary-foreground: #d1d5db;
+  --muted: #1f2937;
+  --muted-foreground: #9ca3af;
+  --accent: #1f2937;
+  --accent-foreground: #d1d5db;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #374151;
+  --input: #1f2937;
+  --ring: #a855f7;
 }
 
 * {
@@ -111,13 +109,21 @@ body {
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
 
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}
+
 /* Focus styles */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2;
+  @apply focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
 }
 
 /* Custom button styles */
@@ -126,7 +132,7 @@ body {
 }
 
 .btn-secondary {
-  @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-200 focus-ring;
+  @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors duration-200 focus-ring dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600;
 }
 
 /* Chat bubble animations */
