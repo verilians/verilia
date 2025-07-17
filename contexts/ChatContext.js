@@ -1,6 +1,9 @@
 "use client";
 
 import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { useUser } from "./UserContext";
+import { useChatSession } from "./ChatSessionContext";
+import { supabase } from "../lib/supabase";
 
 const ChatContext = createContext();
 
@@ -13,6 +16,9 @@ export const useChatContext = () => {
 };
 
 export const ChatProvider = ({ children }) => {
+  const { user } = useUser();
+  const { currentChatId, setCurrentChatId, createChatFromMessage, loadChatMessages } = useChatSession();
+  
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -48,6 +54,17 @@ export const ChatProvider = ({ children }) => {
     setIsLoading(true);
 
     try {
+      // Create chat session if this is the first message and user is signed in
+      let chatId = currentChatId;
+      if (!chatId && user && messages.length === 1) {
+        const chat = await createChatFromMessage(content);
+        chatId = chat?.id;
+        // Update the current chat ID so the chat appears in the sidebar
+        if (chat) {
+          setCurrentChatId(chat.id);
+        }
+      }
+
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -74,8 +91,35 @@ export const ChatProvider = ({ children }) => {
 
       setMessages(prev => [...prev, botResponse]);
 
-      // Save anonymous session to database (only every 3 messages to reduce API calls)
-      if (sessionId && messages.length % 3 === 0) {
+      // Save messages to database
+      if (user && chatId) {
+        try {
+          // Save user message
+          await supabase.from('messages').insert([
+            {
+              user_id: user.id,
+              chat_id: chatId,
+              message: content,
+              sender: 'user',
+              created_at: new Date().toISOString()
+            }
+          ]);
+
+          // Save bot response
+          await supabase.from('messages').insert([
+            {
+              user_id: user.id,
+              chat_id: chatId,
+              message: data.message,
+              sender: 'bot',
+              created_at: new Date().toISOString()
+            }
+          ]);
+        } catch (saveError) {
+          console.error('Failed to save messages:', saveError);
+        }
+      } else if (sessionId && messages.length % 3 === 0) {
+        // Save anonymous session to database (only every 3 messages to reduce API calls)
         try {
           await fetch('/api/save-anonymous-session', {
             method: 'POST',
@@ -107,7 +151,7 @@ export const ChatProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, sessionId]);
+  }, [messages, sessionId, user, currentChatId, createChatFromMessage]);
 
   const clearChat = useCallback(() => {
     setMessages([
@@ -119,13 +163,52 @@ export const ChatProvider = ({ children }) => {
       },
     ]);
     
+    // Clear current chat for signed-in users
+    if (user) {
+      setCurrentChatId(null);
+    }
+    
     // Generate new session ID for anonymous users
     if (!localStorage.getItem('user')) {
       const newSessionId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       localStorage.setItem('anonymousSessionId', newSessionId);
       setSessionId(newSessionId);
     }
-  }, []);
+  }, [user, setCurrentChatId]);
+
+  // Load chat messages when currentChatId changes
+  useEffect(() => {
+    const loadMessages = async () => {
+      if (currentChatId && user) {
+        try {
+          const chatMessages = await loadChatMessages(currentChatId);
+          if (chatMessages.length > 0) {
+            const formattedMessages = chatMessages.map(msg => ({
+              id: msg.id,
+              type: msg.sender === 'user' ? 'user' : 'bot',
+              content: msg.message,
+              timestamp: new Date(msg.created_at)
+            }));
+            setMessages(formattedMessages);
+          } else {
+            // If no messages in chat, show welcome message
+            setMessages([
+              {
+                id: Date.now(),
+                type: "bot",
+                content: "Hello! I'm your Bible counsellor AI. I'm here to provide guidance and support based on biblical wisdom. How can I help you today?",
+                timestamp: new Date(),
+              },
+            ]);
+          }
+        } catch (error) {
+          console.error('Failed to load chat messages:', error);
+        }
+      }
+    };
+
+    loadMessages();
+  }, [currentChatId, user, loadChatMessages]);
 
   const saveToHistory = useCallback((chatId, messages) => {
     setChatHistory(prev => [...prev, { id: chatId, messages, timestamp: new Date() }]);

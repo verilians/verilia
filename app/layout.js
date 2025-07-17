@@ -4,7 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { ChatProvider } from "../contexts/ChatContext";
 import { UserProvider } from "../contexts/UserContext";
 import { ChatHistoryProvider } from "../contexts/ChatHistoryContext";
-import MobileSidebar from "../components/MobileSidebar";
+import { ChatSessionProvider } from "../contexts/ChatSessionContext";
 import SignInModal from "../components/SignInModal";
 
 const geistSans = Geist({
@@ -33,24 +33,19 @@ export default function RootLayout({ children }) {
       >
         <UserProvider>
           <ChatHistoryProvider>
-            <ChatProvider>
-              <div className="flex h-screen bg-gray-50">
-                {/* Desktop Sidebar */}
-                <div className="hidden md:block">
+            <ChatSessionProvider>
+              <ChatProvider>
+                <div className="flex h-screen bg-gray-50">
+                  {/* Responsive Sidebar */}
                   <Sidebar />
+                  
+                  <main className="flex-1 flex flex-col">
+                    {children}
+                  </main>
                 </div>
-                
-                {/* Mobile Sidebar */}
-                <div className="md:hidden">
-                  <MobileSidebar />
-                </div>
-                
-                <main className="flex-1 flex flex-col">
-                  {children}
-                </main>
-              </div>
-              <SignInModal />
-            </ChatProvider>
+                <SignInModal />
+              </ChatProvider>
+            </ChatSessionProvider>
           </ChatHistoryProvider>
         </UserProvider>
       </body>
