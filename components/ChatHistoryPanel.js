@@ -21,7 +21,7 @@ const ChatHistoryPanel = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isLoading]);
 
   // Create a loading message component
   const LoadingMessage = () => (
@@ -69,12 +69,12 @@ const ChatHistoryPanel = () => {
   return (
     <div className="flex-1 overflow-y-auto flex justify-center">
       <div className="w-full max-w-4xl px-4 lg:px-8 py-2 space-y-2">
-        {messages.map((message) => {
+        {messages.map((message, index) => {
           const isLatestAIMessage = message.id === latestAIMessageId && message.type === 'bot';
           
           return (
             <ChatBubble 
-              key={message.id} 
+              key={`${message.id}-${index}`} 
               message={message}
               isLatestAIMessage={isLatestAIMessage}
             />

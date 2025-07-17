@@ -4,29 +4,11 @@ import { useEffect, useRef } from "react";
 import AnimatedText from "./AnimatedText";
 
 const ChatBubble = ({ message, isLatestAIMessage = false }) => {
-  const bubbleRef = useRef(null);
-
-  useEffect(() => {
-    if (bubbleRef.current) {
-      bubbleRef.current.style.opacity = "0";
-      bubbleRef.current.style.transform = "translateY(10px)";
-      
-      setTimeout(() => {
-        if (bubbleRef.current) {
-          bubbleRef.current.style.opacity = "1";
-          bubbleRef.current.style.transform = "translateY(0)";
-        }
-      }, 100);
-    }
-  }, [message.id]);
-
   const isBot = message.type === "bot";
 
   return (
     <div
-      ref={bubbleRef}
       className={`flex ${isBot ? "justify-start" : "justify-end"} transition-all duration-300 ease-out`}
-      style={{ opacity: 0, transform: "translateY(10px)" }}
     >
       <div
         className={`max-w-[85vw] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3  transition-all duration-200 border-b-2 border-gray-200 ${

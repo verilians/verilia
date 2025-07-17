@@ -50,10 +50,14 @@ export const ChatProvider = ({ children }) => {
       timestamp: new Date(),
     };
 
+    // Add user message immediately to UI
     setMessages(prev => [...prev, userMessage]);
     setIsLoading(true);
 
     try {
+      // Get the current messages including the user message we just added
+      const currentMessages = [...messages, userMessage];
+      
       // Create chat session if this is the first message and user is signed in
       let chatId = currentChatId;
       if (!chatId && user && messages.length === 1) {
@@ -71,7 +75,7 @@ export const ChatProvider = ({ children }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          messages: [...messages, userMessage]
+          messages: currentMessages
         }),
       });
 
@@ -89,6 +93,7 @@ export const ChatProvider = ({ children }) => {
         timestamp: new Date(data.timestamp),
       };
 
+      // Add bot response to UI without affecting the user message
       setMessages(prev => [...prev, botResponse]);
 
       // Save messages to database
@@ -118,7 +123,7 @@ export const ChatProvider = ({ children }) => {
         } catch (saveError) {
           console.error('Failed to save messages:', saveError);
         }
-      } else if (sessionId && messages.length % 3 === 0) {
+      } else if (sessionId && currentMessages.length % 3 === 0) {
         // Save anonymous session to database (only every 3 messages to reduce API calls)
         try {
           await fetch('/api/save-anonymous-session', {
@@ -128,7 +133,7 @@ export const ChatProvider = ({ children }) => {
             },
             body: JSON.stringify({
               sessionId,
-              messages: [...messages, userMessage, botResponse],
+              messages: [...currentMessages, botResponse],
               timestamp: new Date().toISOString()
             }),
           });
@@ -179,7 +184,7 @@ export const ChatProvider = ({ children }) => {
   // Load chat messages when currentChatId changes
   useEffect(() => {
     const loadMessages = async () => {
-      if (currentChatId && user) {
+      if (currentChatId && user && !isLoading) {
         try {
           const chatMessages = await loadChatMessages(currentChatId);
           if (chatMessages.length > 0) {
@@ -208,7 +213,7 @@ export const ChatProvider = ({ children }) => {
     };
 
     loadMessages();
-  }, [currentChatId, user, loadChatMessages]);
+  }, [currentChatId, user, loadChatMessages, isLoading]);
 
   const saveToHistory = useCallback((chatId, messages) => {
     setChatHistory(prev => [...prev, { id: chatId, messages, timestamp: new Date() }]);
