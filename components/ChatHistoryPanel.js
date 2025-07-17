@@ -74,24 +74,26 @@ const ChatHistoryPanel = () => {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-4">
-      {messages.map((message) => {
-        const isLatestAIMessage = message.id === latestAIMessageId && message.sender === 'bot';
-        
-        return (
-          <ChatBubble 
-            key={message.id} 
-            message={{
-              id: message.id,
-              type: message.sender === 'user' ? 'user' : 'bot',
-              content: message.message,
-              timestamp: new Date(message.created_at)
-            }}
-            isLatestAIMessage={isLatestAIMessage}
-          />
-        );
-      })}
-      <div ref={messagesEndRef} />
+    <div className="flex-1 overflow-y-auto flex justify-center">
+      <div className="w-full max-w-4xl px-4 lg:px-8 py-2 space-y-2">
+        {messages.map((message) => {
+          const isLatestAIMessage = message.id === latestAIMessageId && message.sender === 'bot';
+          
+          return (
+            <ChatBubble 
+              key={message.id} 
+              message={{
+                id: message.id,
+                type: message.sender === 'user' ? 'user' : 'bot',
+                content: message.message,
+                timestamp: new Date(message.created_at)
+              }}
+              isLatestAIMessage={isLatestAIMessage}
+            />
+          );
+        })}
+        <div ref={messagesEndRef} />
+      </div>
     </div>
   );
 };

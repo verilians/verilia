@@ -29,10 +29,10 @@ const ChatBubble = ({ message, isLatestAIMessage = false }) => {
       style={{ opacity: 0, transform: "translateY(10px)" }}
     >
       <div
-        className={`max-w-[85vw] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3 rounded-2xl shadow-sm transition-all duration-200 hover:shadow-md ${
+        className={`max-w-[85vw] sm:max-w-xs lg:max-w-md px-3 sm:px-4 py-2 sm:py-3  transition-all duration-200 border-b-2 border-gray-200 ${
           isBot
-            ? "bg-white border border-gray-200 text-gray-800"
-            : "bg-purple-600 text-white"
+            ? "text-gray-800"
+            : "text-purple-600"
         }`}
       >
         <div className="flex items-start space-x-2">
@@ -55,14 +55,14 @@ const ChatBubble = ({ message, isLatestAIMessage = false }) => {
             ) : (
               <p className="text-sm leading-relaxed break-words">{message.content}</p>
             )}
-            <p className={`text-xs mt-1 sm:mt-2 ${isBot ? "text-gray-500" : "text-purple-200"}`}>
+            <p className={`text-xs mt-1 sm:mt-2 ${isBot ? "text-gray-500" : "text-purple-400"}`}>
               {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </p>
           </div>
           
           {!isBot && (
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-700 rounded-full flex items-center justify-center flex-shrink-0">
-              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+              <svg className="w-3 h-3 sm:w-4 sm:h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             </div>

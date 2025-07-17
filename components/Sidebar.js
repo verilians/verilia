@@ -5,6 +5,7 @@ import { useChatContext } from "../contexts/ChatContext";
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState("chat");
+  const [isExpanded, setIsExpanded] = useState(false);
   const { clearChat } = useChatContext();
 
   const menuItems = [
@@ -48,25 +49,52 @@ const Sidebar = () => {
     }
   };
 
+  const toggleSidebar = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   return (
-    <div className="w-16 bg-white border-r border-gray-200 flex flex-col items-center py-4 space-y-4">
-      {menuItems.map((item) => (
+    <div className={`${isExpanded ? 'w-64' : 'w-16'} bg-white border-r border-gray-200 flex flex-col h-full transition-all duration-300 ease-in-out`}>
+      {/* Toggle Button */}
+      <div className="flex justify-end p-2">
         <button
-          key={item.id}
-          onClick={() => handleClick(item)}
-          className={`p-3 rounded-lg transition-all duration-200 group relative ${
-            activeTab === item.id
-              ? "bg-purple-100 text-purple-600"
-              : "text-gray-500 hover:text-purple-600 hover:bg-purple-50"
-          }`}
-          title={item.label}
+          onClick={toggleSidebar}
+          className="p-2 rounded-lg text-gray-500 hover:text-purple-600 hover:bg-purple-50 transition-all duration-200"
+          title={isExpanded ? "Collapse sidebar" : "Expand sidebar"}
         >
-          {item.icon}
-          <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
-            {item.label}
-          </span>
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isExpanded ? "M15 19l-7-7 7-7" : "M9 5l7 7-7 7"} />
+          </svg>
         </button>
-      ))}
+      </div>
+
+      {/* Menu Items */}
+      <div className="flex flex-col items-center lg:items-start py-4 space-y-4 flex-1">
+        {menuItems.map((item) => (
+          <button
+            key={item.id}
+            onClick={() => handleClick(item)}
+            className={`p-3 rounded-lg transition-all duration-200 group relative w-12 ${isExpanded ? 'w-full flex items-center px-4 py-3' : ''} ${
+              activeTab === item.id
+                ? "bg-purple-100 text-purple-600"
+                : "text-gray-500 hover:text-purple-600 hover:bg-purple-50"
+            }`}
+            title={item.label}
+          >
+            {item.icon}
+            {isExpanded && (
+              <span className="ml-3 text-sm font-medium">
+                {item.label}
+              </span>
+            )}
+            {!isExpanded && (
+              <span className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-10">
+                {item.label}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };
