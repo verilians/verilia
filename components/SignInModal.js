@@ -22,6 +22,20 @@ const SignInModal = () => {
     }
   }, [user, loading]);
 
+  // Store modal dismissal preference
+  const handleClose = () => {
+    setIsVisible(false);
+    localStorage.setItem('signInModalDismissed', 'true');
+  };
+
+  // Check if user has dismissed the modal before
+  useEffect(() => {
+    const dismissed = localStorage.getItem('signInModalDismissed');
+    if (dismissed === 'true') {
+      setIsVisible(false);
+    }
+  }, []);
+
   const handleSignIn = async () => {
     try {
       setIsSigningIn(true);
@@ -31,10 +45,6 @@ const SignInModal = () => {
     } finally {
       setIsSigningIn(false);
     }
-  };
-
-  const handleClose = () => {
-    setIsVisible(false);
   };
 
   // Don't show if user is signed in or still loading

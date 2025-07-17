@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useEffect } from "react";
 
 const ChatContext = createContext();
 
@@ -24,6 +24,17 @@ export const ChatProvider = ({ children }) => {
   
   const [isLoading, setIsLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState([]);
+  const [sessionId, setSessionId] = useState(null);
+
+  // Generate or retrieve session ID for anonymous users
+  useEffect(() => {
+    let currentSessionId = localStorage.getItem('anonymousSessionId');
+    if (!currentSessionId) {
+      currentSessionId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('anonymousSessionId', currentSessionId);
+    }
+    setSessionId(currentSessionId);
+  }, []);
 
   const sendMessage = useCallback(async (content) => {
     const userMessage = {
@@ -62,6 +73,25 @@ export const ChatProvider = ({ children }) => {
       };
 
       setMessages(prev => [...prev, botResponse]);
+
+      // Save anonymous session to database
+      if (sessionId) {
+        try {
+          await fetch('/api/save-anonymous-session', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              sessionId,
+              messages: [...messages, userMessage, botResponse],
+              timestamp: new Date().toISOString()
+            }),
+          });
+        } catch (saveError) {
+          console.error('Failed to save anonymous session:', saveError);
+        }
+      }
     } catch (error) {
       console.error("Error sending message:", error);
       
@@ -77,7 +107,7 @@ export const ChatProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [messages]);
+  }, [messages, sessionId]);
 
   const clearChat = useCallback(() => {
     setMessages([
@@ -88,6 +118,13 @@ export const ChatProvider = ({ children }) => {
         timestamp: new Date(),
       },
     ]);
+    
+    // Generate new session ID for anonymous users
+    if (!localStorage.getItem('user')) {
+      const newSessionId = `anon_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('anonymousSessionId', newSessionId);
+      setSessionId(newSessionId);
+    }
   }, []);
 
   const saveToHistory = useCallback((chatId, messages) => {
@@ -98,6 +135,7 @@ export const ChatProvider = ({ children }) => {
     messages,
     isLoading,
     chatHistory,
+    sessionId,
     sendMessage,
     clearChat,
     saveToHistory,

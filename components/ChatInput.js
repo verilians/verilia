@@ -28,8 +28,11 @@ const ChatInput = ({ onSendMessage, isSending = false }) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="Ask me anything..."
-            className="w-full px-4 py-3 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 bg-white"
+            placeholder={isSending ? "AI is thinking..." : "Ask me anything..."}
+            disabled={isSending}
+            className={`w-full px-4 py-3 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-500 ${
+              isSending ? 'bg-gray-50 cursor-not-allowed' : 'bg-white'
+            }`}
             rows="1"
             style={{ minHeight: "48px", maxHeight: "120px" }}
           />

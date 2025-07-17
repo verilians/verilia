@@ -1,6 +1,11 @@
+"use client";
+
 import UserBanner from './UserBanner';
+import { useUser } from '../contexts/UserContext';
 
 const ChatHeader = () => {
+  const { user } = useUser();
+
   return (
     <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between relative">
       {/* Left side - Mobile menu space */}
@@ -19,9 +24,16 @@ const ChatHeader = () => {
             <p className="text-xs text-gray-500 hidden sm:block">AI Bible Counsellor</p>
           </div>
         </div>
-        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-          v3.2
-        </span>
+        <div className="flex items-center space-x-2">
+          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+            v3.2
+          </span>
+          {!user && (
+            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+              Anonymous
+            </span>
+          )}
+        </div>
       </div>
       
       {/* Right side - User banner */}

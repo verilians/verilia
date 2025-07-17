@@ -3,17 +3,12 @@
 import ChatHeader from "../components/ChatHeader";
 import ChatHistoryPanel from "../components/ChatHistoryPanel";
 import ChatInput from "../components/ChatInput";
-import { useAIChat } from "../hooks/useAIChat";
-import { useUser } from "../contexts/UserContext";
+import { useChatContext } from "../contexts/ChatContext";
 
 export default function Home() {
-  const { user } = useUser();
-  const { sendMessage, isSending } = useAIChat();
+  const { sendMessage, isLoading } = useChatContext();
 
   const handleSendMessage = async (content) => {
-    if (!user) {
-      return;
-    }
     await sendMessage(content);
   };
 
@@ -23,7 +18,7 @@ export default function Home() {
       
       <ChatHistoryPanel />
       
-      <ChatInput onSendMessage={handleSendMessage} isSending={isSending} />
+      <ChatInput onSendMessage={handleSendMessage} isSending={isLoading} />
     </div>
   );
 }
