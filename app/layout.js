@@ -5,6 +5,7 @@ import { ChatProvider } from "../contexts/ChatContext";
 import { UserProvider } from "../contexts/UserContext";
 import { ChatHistoryProvider } from "../contexts/ChatHistoryContext";
 import MobileSidebar from "../components/MobileSidebar";
+import GoogleOneTap from "../components/GoogleOneTap";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,21 +34,22 @@ export default function RootLayout({ children }) {
         <UserProvider>
           <ChatHistoryProvider>
             <ChatProvider>
-                          <div className="flex h-screen bg-gray-50">
-              {/* Desktop Sidebar */}
-              <div className="hidden md:block">
-                <Sidebar />
+              <div className="flex h-screen bg-gray-50">
+                {/* Desktop Sidebar */}
+                <div className="hidden md:block">
+                  <Sidebar />
+                </div>
+                
+                {/* Mobile Sidebar */}
+                <div className="md:hidden">
+                  <MobileSidebar />
+                </div>
+                
+                <main className="flex-1 flex flex-col">
+                  {children}
+                </main>
               </div>
-              
-              {/* Mobile Sidebar */}
-              <div className="md:hidden">
-                <MobileSidebar />
-              </div>
-              
-              <main className="flex-1 flex flex-col">
-                {children}
-              </main>
-            </div>
+              <GoogleOneTap />
             </ChatProvider>
           </ChatHistoryProvider>
         </UserProvider>

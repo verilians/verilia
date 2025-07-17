@@ -38,19 +38,31 @@ export const UserProvider = ({ children }) => {
     return () => subscription.unsubscribe();
   }, []);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = async (credential = null) => {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-          queryParams: {
-            access_type: 'offline',
-            prompt: 'consent',
+      if (credential) {
+        // One Tap authentication with ID token
+        const { data, error } = await supabase.auth.signInWithIdToken({
+          provider: 'google',
+          token: credential,
+        });
+        if (error) throw error;
+        return { data, error: null };
+      } else {
+        // Regular OAuth flow
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${window.location.origin}/auth/callback`,
+            queryParams: {
+              access_type: 'offline',
+              prompt: 'consent',
+            }
           }
-        }
-      });
-      if (error) throw error;
+        });
+        if (error) throw error;
+        return { data: null, error: null };
+      }
     } catch (error) {
       console.error('Error signing in with Google:', error);
       throw error;
