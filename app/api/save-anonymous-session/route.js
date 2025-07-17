@@ -13,18 +13,65 @@ export async function POST(request) {
       );
     }
 
-    // Insert the anonymous session into the database
-    const { data, error } = await supabase
+    // Check if session already exists
+    const { data: existingSession } = await supabase
       .from('anonymous_sessions')
-      .insert([
-        {
-          session_id: sessionId,
+      .select('*')
+      .eq('session_id', sessionId)
+      .single();
+
+    if (existingSession) {
+      // Update existing session
+      const { data, error } = await supabase
+        .from('anonymous_sessions')
+        .update({
           messages: messages,
-          created_at: timestamp,
           updated_at: timestamp
-        }
-      ])
-      .select();
+        })
+        .eq('session_id', sessionId)
+        .select();
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        return NextResponse.json(
+          { error: 'Failed to update anonymous session', details: error.message },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: 'Anonymous session updated successfully',
+        data: data[0]
+      });
+    } else {
+      // Insert new session
+      const { data, error } = await supabase
+        .from('anonymous_sessions')
+        .insert([
+          {
+            session_id: sessionId,
+            messages: messages,
+            created_at: timestamp,
+            updated_at: timestamp
+          }
+        ])
+        .select();
+      
+      if (error) {
+        console.error('Supabase error:', error);
+        return NextResponse.json(
+          { error: 'Failed to save anonymous session', details: error.message },
+          { status: 500 }
+        );
+      }
+
+      return NextResponse.json({
+        success: true,
+        message: 'Anonymous session saved successfully',
+        data: data[0]
+      });
+    }
 
     if (error) {
       console.error('Supabase error:', error);

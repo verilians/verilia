@@ -74,8 +74,8 @@ export const ChatProvider = ({ children }) => {
 
       setMessages(prev => [...prev, botResponse]);
 
-      // Save anonymous session to database
-      if (sessionId) {
+      // Save anonymous session to database (only every 3 messages to reduce API calls)
+      if (sessionId && messages.length % 3 === 0) {
         try {
           await fetch('/api/save-anonymous-session', {
             method: 'POST',
