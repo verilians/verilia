@@ -7,6 +7,7 @@ import { ChatHistoryProvider } from "../contexts/ChatHistoryContext";
 import { ChatSessionProvider } from "../contexts/ChatSessionContext";
 import { ThemeProvider } from "../contexts/ThemeContext";
 import SignInModal from "../components/SignInModal";
+import FeedbackButton from "../components/FeedbackButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -46,6 +47,7 @@ export default function RootLayout({ children }) {
                     </main>
                   </div>
                   <SignInModal />
+                  <FeedbackButton />
                 </ChatProvider>
               </ChatSessionProvider>
             </ChatHistoryProvider>
